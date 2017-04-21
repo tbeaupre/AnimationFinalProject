@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\LSystem\LSystem.cs" />
+     <Compile Include="Assets\LSystem\LSystemTest.cs" />
      <Compile Include="Assets\Stem.cs" />
      <Compile Include="Assets\Timer.cs" />
  <Reference Include="UnityEngine.UI">
