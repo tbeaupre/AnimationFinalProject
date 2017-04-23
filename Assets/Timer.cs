@@ -5,31 +5,26 @@ using UnityEngine;
 public class Timer : MonoBehaviour {
 	int dt = 60;
 	int timer = 1;
-	int i;
-	//int bend = 180;
-	public Stem root;
+	public LSystemImplement lSystemImplement;
+	Stem plant;
 
 	// Use this for initialization
 	void Start () {
-		i = 6;
+		plant = lSystemImplement.CreateGameObject(0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (timer <= i * dt)
+		timer++;
+		if (timer <= dt * lSystemImplement.maxN)
 		{
-			timer++;
 			if (timer % dt == 0)
 			{
-				Debug.Log("Timer Activated");
-				if (root)
+				if (lSystemImplement)
 				{
-					root.Grow();
+					plant.DestroyChildren();
+					plant = lSystemImplement.CreateGameObject(timer / dt);
 				}
-				//if (timer == bend)
-				//{
-				//	root.Bend();
-				//}
 			}
 		}
 	}

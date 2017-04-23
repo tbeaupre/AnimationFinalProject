@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class LSystem
 {
 	Dictionary<char, string> rules;
-	float angle = 25; // the change in angle that + and - make (in degrees).
+	public float angle = 25; // the change in angle that + and - make (in degrees).
 	int maxN;
 
 	List<string> results;

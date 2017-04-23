@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Stem : MonoBehaviour {
 	public Stem stemPrefab;
-	int age = 0;
 	public List<Stem> children = new List<Stem>();
 
 	// Use this for initialization
@@ -12,7 +11,7 @@ public class Stem : MonoBehaviour {
 
 	}
 
-	void Init (Stem stemPrefab, List<Stem> children)
+	public void Init (Stem stemPrefab, List<Stem> children)
 	{
 		this.stemPrefab = stemPrefab;
 		foreach (Stem child in children)
@@ -24,28 +23,27 @@ public class Stem : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		
 	}
 
-	public void GrowChildren()
+	public void DestroyChildren()
 	{
-		Debug.Log("Growing Children");
 		foreach (Stem child in children)
 		{
-			child.Grow();
+			child.DestroyChildren();
 		}
+		Destroy(this.gameObject);
 	}
 
-	public virtual void Grow ()
+	public Stem AddStemSegment()
 	{
-		Debug.Log("Stem Growing");
-		age++;
-		GrowChildren();
-
 		Stem stemClone = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
 		stemClone.transform.SetParent(this.transform);
-		stemClone.Init(stemPrefab, children);
+		stemClone.stemPrefab = this.stemPrefab;
 		stemClone.transform.Translate(0, 0.4f, 0);
-		this.children.Clear();
+
 		this.children.Add(stemClone);
+
+		return stemClone;
 	}
 }
