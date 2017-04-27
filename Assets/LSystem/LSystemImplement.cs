@@ -11,16 +11,15 @@ public class LSystemImplement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Dictionary<char, string> rules = new Dictionary<char, string>();
-		rules.Add('X', "F-[[X]+X]+F[+FX]-X");
-		rules.Add('F', "FF");
+		Dictionary<char, List<Rule>> rules = new Dictionary<char, List<Rule>>();
+		rules.Add('X', new List<Rule>(){new Rule("F-[[X]+X]+F[+FX]-X")});
+		rules.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
 		this.lSystem = new LSystem("X", rules, 25, maxN);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	
 	}
 
 	public Stem CreateGameObject (int n)
@@ -29,10 +28,11 @@ public class LSystemImplement : MonoBehaviour
 		{
 			string blueprint = lSystem.GetResult(n);
 			Stem plant = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
-			Stem currentStem = plant;
-			currentStem.Init(stemPrefab, new List<Stem>());
 			Stack<Stem> stemStack = new Stack<Stem>();
 			float angle = 0;
+
+			Stem currentStem = plant;
+			currentStem.stemPrefab = stemPrefab;
 
 			for (int i = 0; i < blueprint.Length; i++)
 			{

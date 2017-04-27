@@ -22,7 +22,7 @@ public class Timer : MonoBehaviour {
 			{
 				if (lSystemImplement)
 				{
-					plant.DestroyChildren();
+					Destroy(plant.gameObject);
 					plant = lSystemImplement.CreateGameObject(timer / dt);
 				}
 			}
