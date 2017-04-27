@@ -9,10 +9,13 @@ public class LSystemTest : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Dictionary<char, string> rules = new Dictionary<char, string>();
-		rules.Add('X', "F-[[X]+X]+F[+FX]-X");
-		rules.Add('F', "FF");
-		this.lSystem = new LSystem("X", rules, 25, 6);
+		string start = "X";
+		float angle = 25;
+		int maxN = 6;
+		Dictionary<char, List<Rule>> rules = new Dictionary<char, List<Rule>>();
+		rules.Add('X', new List<Rule>(){new Rule("F-[[X]+X]+F[+FX]-X")});
+		rules.Add('F', new List<Rule>(){new Rule("FF")});
+		this.lSystem = new LSystem(start, rules, angle, maxN);
 
 		for (int n = 0; n < 10; n++)
 		{

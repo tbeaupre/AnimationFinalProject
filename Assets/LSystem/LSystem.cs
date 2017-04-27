@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 public class LSystem
 {
-	Dictionary<char, string> rules;
+	Dictionary<char, List<Rule>> rules;
 	public float angle = 25; // the change in angle that + and - make (in degrees).
 	int maxN;
 
 	List<string> results;
 
-	public LSystem (string start, Dictionary<char, string> rules, float angle, int maxN)
+	public LSystem (string start, Dictionary<char, List<Rule>> rules, float angle, int maxN)
 	{
+		Random.InitState(System.Environment.TickCount);
 		this.rules = rules;
 		this.angle = angle;
 		this.maxN = maxN;
@@ -24,6 +25,10 @@ public class LSystem
 		if (n > maxN)
 		{
 			n = maxN;
+		}
+		if (n < 0)
+		{
+			n = 0;
 		}
 
 		// Check if that iteration has already been calculated.
@@ -51,23 +56,41 @@ public class LSystem
 
 	public string ApplyRules(string s)
 	{
-		string result = s; // result is the string to manipulate and return
-		for (int i = s.Length - 1; i >= 0; i--) // start from the back and work forwards
+		string result = s; // the string to manipulate
+		for (int i = s.Length - 1; i >= 0; i--) // back to front
 		{
-			char key = s[i]; // this is the character to analyze
-			if (rules.ContainsKey(key)) // need to see if the character is a variable
+			char key = s[i]; // the char to analyze
+			if (rules.ContainsKey(key)) // ensure the char has a rule
 			{
-				result = ApplyRule(rules[key], result, i); // applies the rule at that location
+				result = ApplyRule(rules[key], result, i); // apply the rule
 			}
 		}
 		return result;
 	}
 
-	// Replaces character at 'index' of 's' with 'replacement'
-	public string ApplyRule(string replacement, string s, int index)
+	// Replaces character at 'index' of 's' with a random string from the 'rule'
+	public string ApplyRule(List<Rule> rule, string s, int index)
 	{
+		string replacement = ChooseRule(rule);
+
 		s = s.Remove(index, 1);
 		return s.Insert(index, replacement);
+	}
+
+	public string ChooseRule(List<Rule> rule)
+	{
+		float rand = Random.value;
+		foreach (Rule option in rule)
+		{
+			if (rand < option.prob)
+			{
+				return option.output;
+			} else
+			{
+				rand -= option.prob;
+			}
+		}
+		return "Error"; // This should never happen.
 	}
 }
 
