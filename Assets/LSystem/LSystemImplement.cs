@@ -11,10 +11,22 @@ public class LSystemImplement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Dictionary<char, List<Rule>> rules = new Dictionary<char, List<Rule>>();
-		rules.Add('X', new List<Rule>(){new Rule("F-[[X]+X]+F[+FX]-X")});
-		rules.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
-		this.lSystem = new LSystem("X", rules, 25, maxN);
+		Dictionary<char, List<Rule>> rules1 = new Dictionary<char, List<Rule>>();
+		rules1.Add('X', new List<Rule>(){new Rule("F-&[[X]\\+^X]/+^F[+^FX]\\-&X")});
+		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
+
+		Dictionary<char, List<Rule>> rules2 = new Dictionary<char, List<Rule>>();
+		rules2.Add('X', new List<Rule>(){	new Rule(0.32f, "[[//+FX]\\+FX]\\-FX"),
+											new Rule(0.32f, "[\\+FX]\\-FX"),
+											new Rule(0.32f, "[/+FX]/-FX"),
+											new Rule(0.03f, "\\-FX"),
+											new Rule(0.03f, "/-FX")});
+		
+		rules2.Add('F', new List<Rule>(){	new Rule(0.7f, "FF"),
+											new Rule(0.3f, "F")});
+
+
+		this.lSystem = new LSystem("X", rules2, 25, 70, 25, maxN);
 	}
 	
 	// Update is called once per frame
@@ -29,7 +41,9 @@ public class LSystemImplement : MonoBehaviour
 			string blueprint = lSystem.GetResult(n);
 			Stem plant = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
 			Stack<Stem> stemStack = new Stack<Stem>();
-			float angle = 0;
+			float roll = 0;
+			float pitch = 0;
+			float yaw = 0;
 
 			Stem currentStem = plant;
 			currentStem.stemPrefab = stemPrefab;
@@ -40,15 +54,31 @@ public class LSystemImplement : MonoBehaviour
 				{
 				case 'F':
 					currentStem = currentStem.AddStemSegment();
-					currentStem.transform.Rotate(0, 0, angle);
-					angle = 0;
+					currentStem.transform.Rotate(pitch, yaw, roll);
+					pitch = 0;
+					yaw = 0;
+					roll = 0;
+					break;
+
+				case '&':
+					pitch -= lSystem.pitch;
+					break;
+				case '^':
+					pitch += lSystem.pitch;
+					break;
+				case '\\':
+					yaw -= lSystem.yaw;
+					break;
+				case '/':
+					yaw += lSystem.yaw;
 					break;
 				case '-':
-					angle -= lSystem.angle;
+					roll -= lSystem.roll;
 					break;
 				case '+':
-					angle += lSystem.angle;
+					roll += lSystem.roll;
 					break;
+
 				case '[':
 					stemStack.Push(currentStem);
 					break;

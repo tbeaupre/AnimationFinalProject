@@ -5,18 +5,29 @@ using System.Collections.Generic;
 public class LSystem
 {
 	Dictionary<char, List<Rule>> rules;
-	public float angle = 25; // the change in angle that + and - make (in degrees).
+	public float pitch = 25; // the change in angle that ^ and & make (in degrees).
+	public float yaw = 25; // the change in angle that \ and / make (in degrees).
+	public float roll = 25; // the change in angle that + and - make (in degrees).
 	int maxN;
 
 	List<string> results;
 
-	public LSystem (string start, Dictionary<char, List<Rule>> rules, float angle, int maxN)
+	public LSystem (string start, Dictionary<char, List<Rule>> rules, float pitch, float yaw, float roll, int maxN)
 	{
 		Random.InitState(System.Environment.TickCount);
 		this.rules = rules;
-		this.angle = angle;
+
+		this.pitch = pitch;
+		this.yaw = yaw;
+		this.roll = roll;
+
 		this.maxN = maxN;
 		this.results = new List<string>(maxN + 1) {start};
+	}
+
+	public LSystem (string start, Dictionary<char, List<Rule>> rules, float angle, int maxN)
+	{
+		new LSystem(start, rules, angle, angle, angle, maxN);
 	}
 
 	public string GetResult(int n)
