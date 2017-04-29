@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class LSystem
 {
-	Dictionary<char, List<Rule>> rules;
+	RuleSet rules;
 	public float pitch = 25; // the change in angle that ^ and & make (in degrees).
 	public float yaw = 25; // the change in angle that \ and / make (in degrees).
 	public float roll = 25; // the change in angle that + and - make (in degrees).
@@ -12,7 +12,7 @@ public class LSystem
 
 	List<string> results;
 
-	public LSystem (string start, Dictionary<char, List<Rule>> rules, float pitch, float yaw, float roll, int maxN)
+	public LSystem (string start, RuleSet rules, float pitch, float yaw, float roll, int maxN)
 	{
 		Random.InitState(System.Environment.TickCount);
 		this.rules = rules;
@@ -25,7 +25,7 @@ public class LSystem
 		this.results = new List<string>(maxN + 1) {start};
 	}
 
-	public LSystem (string start, Dictionary<char, List<Rule>> rules, float angle, int maxN)
+	public LSystem (string start, RuleSet rules, float angle, int maxN)
 	{
 		new LSystem(start, rules, angle, angle, angle, maxN);
 	}
@@ -73,7 +73,7 @@ public class LSystem
 			char key = s[i]; // the char to analyze
 			if (rules.ContainsKey(key)) // ensure the char has a rule
 			{
-				result = ApplyRule(rules[key], result, i); // apply the rule
+				result = ApplyRule(rules.GetValue(key), result, i); // apply the rule
 			}
 		}
 		return result;

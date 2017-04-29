@@ -11,19 +11,19 @@ public class LSystemImplement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		Dictionary<char, List<Rule>> rules1 = new Dictionary<char, List<Rule>>();
-		rules1.Add('X', new List<Rule>(){new Rule("F-&[[X]\\+^X]/+^F[+^FX]\\-&X")});
-		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
+//		RuleSet rules1 = new Dictionary<char, List<Rule>>();
+//		rules1.Add('X', new List<Rule>(){new Rule("F-&[[X]\\+^X]/+^F[+^FX]\\-&X")});
+//		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
 
-		Dictionary<char, List<Rule>> rules2 = new Dictionary<char, List<Rule>>();
-		rules2.Add('X', new List<Rule>(){	new Rule(0.32f, "[[//+FX]\\+FX]\\-FX"),
-											new Rule(0.32f, "[\\+FX]\\-FX"),
-											new Rule(0.32f, "[/+FX]/-FX"),
-											new Rule(0.03f, "\\-FX"),
-											new Rule(0.03f, "/-FX")});
+		RuleSet rules2 = new RuleSet();
+		rules2.AddRule('X', 0.32f, "[[//+FX]\\+FX]\\-FX");
+		rules2.AddRule('X', 0.32f, "[\\+FX]\\-FX");
+		rules2.AddRule('X', 0.32f, "[/+FX]/-FX");
+		rules2.AddRule('X', 0.03f, "\\-FX");
+		rules2.AddRule('X', 0.03f, "/-FX");
 		
-		rules2.Add('F', new List<Rule>(){	new Rule(0.7f, "FF"),
-											new Rule(0.3f, "F")});
+		rules2.AddRule('F', 0.7f, "FF");
+		rules2.AddRule('F', 0.3f, "F");
 
 
 		this.lSystem = new LSystem("X", rules2, 25, 70, 25, maxN);

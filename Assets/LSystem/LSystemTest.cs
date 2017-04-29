@@ -12,9 +12,15 @@ public class LSystemTest : MonoBehaviour
 		string start = "X";
 		float angle = 25;
 		int maxN = 6;
-		Dictionary<char, List<Rule>> rules = new Dictionary<char, List<Rule>>();
-		rules.Add('X', new List<Rule>(){new Rule("F-[[X]+X]+F[+FX]-X")});
-		rules.Add('F', new List<Rule>(){new Rule("FF")});
+		RuleSet rules = new RuleSet();
+		rules.AddRule('X', 0.32f, "[[//+FX]\\+FX]\\-FX");
+		rules.AddRule('X', 0.32f, "[\\+FX]\\-FX");
+		rules.AddRule('X', 0.32f, "[/+FX]/-FX");
+		rules.AddRule('X', 0.03f, "\\-FX");
+		rules.AddRule('X', 0.03f, "/-FX");
+
+		rules.AddRule('F', 0.7f, "FF");
+		rules.AddRule('F', 0.3f, "F");
 		this.lSystem = new LSystem(start, rules, angle, maxN);
 
 		for (int n = 0; n < 10; n++)
