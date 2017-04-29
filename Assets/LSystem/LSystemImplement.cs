@@ -16,15 +16,11 @@ public class LSystemImplement : MonoBehaviour
 //		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
 
 		RuleSet rules2 = new RuleSet();
-		rules2.AddRule('X', 0.32f, "[[//+FX]\\+FX]\\-FX");
-		rules2.AddRule('X', 0.32f, "[\\+FX]\\-FX");
-		rules2.AddRule('X', 0.32f, "[/+FX]/-FX");
-		rules2.AddRule('X', 0.03f, "\\-FX");
-		rules2.AddRule('X', 0.03f, "/-FX");
-		
-		rules2.AddRule('F', 0.7f, "FF");
-		rules2.AddRule('F', 0.3f, "F");
-
+		rules2.AddRule('X', 0.32f, "[[//+F(0)X]\\+F(0)X]\\-F(0)X");
+		rules2.AddRule('X', 0.32f, "[\\+F(0)X]\\-F(0)X");
+		rules2.AddRule('X', 0.32f, "[/+F(0)X]/-F(0)X");
+		rules2.AddRule('X', 0.03f, "\\-F(0)X");
+		rules2.AddRule('X', 0.03f, "/-F(0)X");
 
 		this.lSystem = new LSystem("X", rules2, 25, 70, 25, maxN);
 	}

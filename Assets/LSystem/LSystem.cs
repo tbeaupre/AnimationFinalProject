@@ -25,11 +25,6 @@ public class LSystem
 		this.results = new List<string>(maxN + 1) {start};
 	}
 
-	public LSystem (string start, RuleSet rules, float angle, int maxN)
-	{
-		new LSystem(start, rules, angle, angle, angle, maxN);
-	}
-
 	public string GetResult(int n)
 	{
 		// First. check if the iteration asked for is greater than the max for this system.
@@ -71,7 +66,21 @@ public class LSystem
 		for (int i = s.Length - 1; i >= 0; i--) // back to front
 		{
 			char key = s[i]; // the char to analyze
-			if (rules.ContainsKey(key)) // ensure the char has a rule
+			if (key == ')') // Increments Variable Age
+			{
+				string numStr = "";
+				i--;
+				while (s[i] !='(')
+				{
+					numStr = s[i] + numStr;
+					i--;
+				}
+				int num = int.Parse(numStr);
+				num++;
+				result = result.Remove(i + 1, numStr.Length);
+				result = result.Insert(i + 1, string.Format("{0}", num));
+			}
+			else if (rules.ContainsKey(key)) // ensure the char has a rule
 			{
 				result = ApplyRule(rules.GetValue(key), result, i); // apply the rule
 			}

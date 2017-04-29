@@ -14,10 +14,10 @@ public class RuleSet
 	{
 		if (ruleset.ContainsKey(input))
 		{
-			ruleset.Add(input, new List<Rule>(){ new Rule(probability, output) });
+			ruleset[input].Add(new Rule(probability, output));
 		} else
 		{
-			ruleset[input].Add(new Rule(probability, output));
+			ruleset.Add(input, new List<Rule>(){ new Rule(probability, output) });
 		}
 	}
 

@@ -10,18 +10,17 @@ public class LSystemTest : MonoBehaviour
 	void Start ()
 	{
 		string start = "X";
-		float angle = 25;
+		float pitch = 25;
+		float yaw = 70;
+		float roll = 25;
 		int maxN = 6;
 		RuleSet rules = new RuleSet();
-		rules.AddRule('X', 0.32f, "[[//+FX]\\+FX]\\-FX");
-		rules.AddRule('X', 0.32f, "[\\+FX]\\-FX");
-		rules.AddRule('X', 0.32f, "[/+FX]/-FX");
-		rules.AddRule('X', 0.03f, "\\-FX");
-		rules.AddRule('X', 0.03f, "/-FX");
-
-		rules.AddRule('F', 0.7f, "FF");
-		rules.AddRule('F', 0.3f, "F");
-		this.lSystem = new LSystem(start, rules, angle, maxN);
+		rules.AddRule('X', 0.32f, "[[//+F(0)X]\\+F(0)X]\\-F(0)X");
+		rules.AddRule('X', 0.32f, "[\\+F(0)X]\\-F(0)X");
+		rules.AddRule('X', 0.32f, "[/+F(0)X]/-F(0)X");
+		rules.AddRule('X', 0.03f, "\\-F(0)X");
+		rules.AddRule('X', 0.03f, "/-F(0)X");
+		this.lSystem = new LSystem(start, rules, pitch, yaw, roll, maxN);
 
 		for (int n = 0; n < 10; n++)
 		{
