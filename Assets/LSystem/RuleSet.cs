@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class RuleSet
 {
-	Dictionary<char, List<Rule>> ruleset = new Dictionary<char, List<Rule>>();
+	Dictionary<string, List<Rule>> ruleset = new Dictionary<string, List<Rule>>();
 
 	public RuleSet ()
 	{
 	}
 
-	public void AddRule(char input, float probability, string output)
+	public void AddRule(string input, float probability, string output)
 	{
 		if (ruleset.ContainsKey(input))
 		{
@@ -21,12 +21,12 @@ public class RuleSet
 		}
 	}
 
-	public bool ContainsKey(char input)
+	public bool ContainsKey(string input)
 	{
 		return ruleset.ContainsKey(input);
 	}
 
-	public List<Rule> GetValue(char key)
+	public List<Rule> GetValue(string key)
 	{
 		return ruleset[key];
 	}

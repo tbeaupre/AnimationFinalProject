@@ -63,24 +63,15 @@ public class LSystem
 	public string ApplyRules(string s)
 	{
 		string result = s; // the string to manipulate
-		for (int i = s.Length - 1; i >= 0; i--) // back to front
+		for (int i = s.Length - 2; i >= 0; i-=2) // back to front
 		{
-			char key = s[i]; // the char to analyze
-			if (key == ')') // Increments Variable Age
+			string key = s.Substring(i, 2); // the char to analyze
+			if (key[1] > '@')
 			{
-				string numStr = "";
-				i--;
-				while (s[i] !='(')
-				{
-					numStr = s[i] + numStr;
-					i--;
-				}
-				int num = int.Parse(numStr);
-				num++;
-				result = result.Remove(i + 1, numStr.Length);
-				result = result.Insert(i + 1, string.Format("{0}", num));
+				string replacement = string.Concat(key[0], (char)(key[1] + 1));
+				result = ApplyRule(replacement, result, i);
 			}
-			else if (rules.ContainsKey(key)) // ensure the char has a rule
+			if (rules.ContainsKey(key)) // ensure the char has a rule
 			{
 				result = ApplyRule(rules.GetValue(key), result, i); // apply the rule
 			}
@@ -89,12 +80,15 @@ public class LSystem
 	}
 
 	// Replaces character at 'index' of 's' with a random string from the 'rule'
+	public string ApplyRule(string replacement, string s, int index)
+	{
+		s = s.Remove(index, 2);
+		return s.Insert(index, replacement);
+	}
+
 	public string ApplyRule(List<Rule> rule, string s, int index)
 	{
-		string replacement = ChooseRule(rule);
-
-		s = s.Remove(index, 1);
-		return s.Insert(index, replacement);
+		return ApplyRule(ChooseRule(rule), s, index);
 	}
 
 	public string ChooseRule(List<Rule> rule)

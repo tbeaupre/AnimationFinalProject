@@ -6,7 +6,9 @@ public class LSystemImplement : MonoBehaviour
 {
 	public Stem stemPrefab;
 	LSystem lSystem;
-	public int maxN = 6;
+	public int maxN = 100;
+	public int maxX = 15;
+	public int maxF = 60;
 
 	// Use this for initialization
 	void Start ()
@@ -15,14 +17,20 @@ public class LSystemImplement : MonoBehaviour
 //		rules1.Add('X', new List<Rule>(){new Rule("F-&[[X]\\+^X]/+^F[+^FX]\\-&X")});
 //		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
 
-		RuleSet rules2 = new RuleSet();
-		rules2.AddRule('X', 0.32f, "[[//+F(0)X]\\+F(0)X]\\-F(0)X");
-		rules2.AddRule('X', 0.32f, "[\\+F(0)X]\\-F(0)X");
-		rules2.AddRule('X', 0.32f, "[/+F(0)X]/-F(0)X");
-		rules2.AddRule('X', 0.03f, "\\-F(0)X");
-		rules2.AddRule('X', 0.03f, "/-F(0)X");
+		char maxXChar = (char)('A' + maxX);
+		string maxXStr = string.Concat('X', maxXChar);
+		Debug.Log(string.Format("Test: maxXChar = {0}, maxXStr = {1}", maxXChar, maxXStr));
 
-		this.lSystem = new LSystem("X", rules2, 25, 70, 25, maxN);
+		RuleSet rules2 = new RuleSet();
+		rules2.AddRule(maxXStr, 0.32f, "[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA");
+		rules2.AddRule(maxXStr, 0.32f, "[@\\@+@FAXA]@\\@-@FAXA");
+		rules2.AddRule(maxXStr, 0.32f, "[@/@+@FAXA]@/@-@FAXA");
+		rules2.AddRule(maxXStr, 0.03f, "\\@-@FAXA");
+		rules2.AddRule(maxXStr, 0.03f, "/@-@FAXA");
+
+		rules2.AddRule(string.Concat('F', (char)('A' + maxF + 1)), 1f, string.Concat('F', (char)('A' + maxF)));
+
+		this.lSystem = new LSystem("XA", rules2, 25, 70, 25, maxN);
 	}
 	
 	// Update is called once per frame
@@ -35,6 +43,7 @@ public class LSystemImplement : MonoBehaviour
 		if (lSystem != null)
 		{
 			string blueprint = lSystem.GetResult(n);
+			Debug.Log(string.Format("n({0}) = {1}", n, blueprint));
 			Stem plant = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
 			Stack<Stem> stemStack = new Stack<Stem>();
 			float roll = 0;
@@ -44,12 +53,12 @@ public class LSystemImplement : MonoBehaviour
 			Stem currentStem = plant;
 			currentStem.stemPrefab = stemPrefab;
 
-			for (int i = 0; i < blueprint.Length; i++)
+			for (int i = 0; i < blueprint.Length; i+= 2)
 			{
 				switch (blueprint[i])
 				{
 				case 'F':
-					currentStem = currentStem.AddStemSegment();
+					currentStem = currentStem.AddStemSegment((int)blueprint[i+1]);
 					currentStem.transform.Rotate(pitch, yaw, roll);
 					pitch = 0;
 					yaw = 0;

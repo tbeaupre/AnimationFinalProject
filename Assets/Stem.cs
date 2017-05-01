@@ -5,7 +5,9 @@ using UnityEngine;
 public class Stem : MonoBehaviour {
 	public Stem stemPrefab;
 	private Transform cylinder;
-	const float RADIUS = 0.1f;
+	const float START_RADIUS = 0.1f;
+	const float DELTA_RADIUS = 0.01f;
+	const float DELTA_LENGTH = 0.02f;
 	const int MAX_AGE = 20;
 	int age = 1; // The age of the segment in frames.
 
@@ -13,11 +15,22 @@ public class Stem : MonoBehaviour {
 	void Start () {
 	}
 
-	void Init(Stem stemPrefab, float offset)
+	void Init(Stem stemPrefab, float offset, int age)
 	{
 		this.stemPrefab = stemPrefab;
-		this.transform.Translate(0, offset, 0);
+		this.age = age;
 		CalcCylinder();
+
+
+		float rad = START_RADIUS + (age * DELTA_RADIUS);
+		float len = age * DELTA_LENGTH;
+		Vector3 newScale = new Vector3(rad, len, rad);
+		Vector3 newPos = new Vector3(0, len, 0);
+		GetCylinder().localScale = newScale;
+		GetCylinder().position = newPos;
+
+
+		this.transform.Translate(0, offset, 0);
 	}
 
 	private void CalcCylinder()
@@ -29,9 +42,6 @@ public class Stem : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		float rad = age * RADIUS;
-		Vector3 newScale = new Vector3(rad, GetCylinder().localScale.y, rad);
-		GetCylinder().localScale = newScale;
 	}
 
 	public Transform GetCylinder()
@@ -48,12 +58,11 @@ public class Stem : MonoBehaviour {
 		return offset;
 	}
 
-	public Stem AddStemSegment()
+	public Stem AddStemSegment(int age)
 	{
 		Stem stemClone = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
 		stemClone.transform.SetParent(this.transform);
-		stemClone.Init(stemPrefab, GetTransformOffset());
-
+		stemClone.Init(stemPrefab, GetTransformOffset(), age);
 		return stemClone;
 	}
 }

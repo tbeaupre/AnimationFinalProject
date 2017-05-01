@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Timer : MonoBehaviour {
-	int dt = 60;
+	int dt = 10;
 	int timer = 1;
 	public LSystemImplement lSystemImplement;
 	Stem plant;
