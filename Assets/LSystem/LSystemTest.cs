@@ -10,9 +10,9 @@ public class LSystemTest : MonoBehaviour
 	void Start ()
 	{
 		string start = "X";
-		float pitch = 25;
+		float pitch = 35;
 		float yaw = 70;
-		float roll = 25;
+		float roll = 35;
 		int maxN = 6;
 		RuleSet rules = new RuleSet();
 		rules.AddRule("X", 0.32f, "[[//+F(0)X]\\+F(0)X]\\-F(0)X");

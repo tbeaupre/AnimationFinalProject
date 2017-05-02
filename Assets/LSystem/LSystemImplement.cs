@@ -7,8 +7,8 @@ public class LSystemImplement : MonoBehaviour
 	public Stem stemPrefab;
 	LSystem lSystem;
 	public int maxN = 100;
-	public int maxX = 15;
-	public int maxF = 60;
+	public int maxX = 20;
+	public int maxF = 120;
 
 	// Use this for initialization
 	void Start ()
@@ -30,7 +30,7 @@ public class LSystemImplement : MonoBehaviour
 
 		rules2.AddRule(string.Concat('F', (char)('A' + maxF + 1)), 1f, string.Concat('F', (char)('A' + maxF)));
 
-		this.lSystem = new LSystem("XA", rules2, 25, 70, 25, maxN);
+		this.lSystem = new LSystem("XH", rules2, 30, 70, 30, maxN);
 	}
 	
 	// Update is called once per frame
@@ -58,8 +58,8 @@ public class LSystemImplement : MonoBehaviour
 				switch (blueprint[i])
 				{
 				case 'F':
-					currentStem = currentStem.AddStemSegment((int)blueprint[i+1]);
-					currentStem.transform.Rotate(pitch, yaw, roll);
+					currentStem = currentStem.AddStemSegment((int)blueprint[i+1] - (int)'A', pitch, yaw, roll);
+					//currentStem.transform.Rotate(pitch, yaw, roll);
 					pitch = 0;
 					yaw = 0;
 					roll = 0;
