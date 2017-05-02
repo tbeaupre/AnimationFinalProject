@@ -10,20 +10,27 @@ public class LSystemImplement : MonoBehaviour
 	public int maxX = 20;
 	public int maxF = 120;
 	List<Stem> stemList = new List<Stem>();
-	Stem root;
+	Stem root = null;
 
 	// Use this for initialization
 	void Start ()
 	{
 		RuleSet rules = new RuleSet();
-		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@/@+@FAXA]@/@-@FAXA"));
-		rules.AddRule(new Symbol('X', maxX), 0.03f, new SymbolString("\\@-@FAXA"));
-		rules.AddRule(new Symbol('X', maxX), 0.03f, new SymbolString("/@-@FAXA"));
+		Symbol maxXSym = new Symbol('X', maxX);
+		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@/@+@FAXA]@/@-@FAXA"));
+		rules.AddRule(maxXSym, 0.03f, new SymbolString("\\@-@FAXA"));
+		rules.AddRule(maxXSym, 0.03f, new SymbolString("/@-@FAXA"));
+
+		rules.AddRule(new Symbol('F', maxF), 1, (SymbolString)new Symbol('F', maxF - 1));
 
 		this.lSystem = new LSystem(new Symbol('X', 10), rules, 30, 70, 30, maxN);
-		root = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
+		if (root == null)
+		{
+			root = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
+			root.age = 1;
+		}
 	}
 	
 	// Update is called once per frame
@@ -31,12 +38,11 @@ public class LSystemImplement : MonoBehaviour
 	{
 	}
 
-	public Stem CreateGameObject (int n)
+	public void CreateGameObject (int n)
 	{
 		if (lSystem != null)
 		{
 			SymbolString blueprint = lSystem.GetResult(n);
-			Debug.Log(string.Format("n({0}) = {1}", n, (string)blueprint));
 
 			SymbolString result = blueprint; // The blueprint edited to include the id of the stem segment
 
@@ -99,11 +105,12 @@ public class LSystemImplement : MonoBehaviour
 					break;
 				}
 			}
-			return root;
+			root.UpdateChildTransforms(0);
+			Debug.Log(string.Format("n({0}) = {1}", n, (string)result));
 		} else
 		{
 			this.Start();
-			return this.CreateGameObject(n);
+			this.CreateGameObject(n);
 		}
 	}
 }

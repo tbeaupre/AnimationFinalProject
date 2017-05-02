@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class RuleSet
 {
-	Dictionary<Symbol, List<Rule>> ruleset = new Dictionary<Symbol, List<Rule>>();
+	Dictionary<string, List<Rule>> ruleset = new Dictionary<string, List<Rule>>();
 
 	public RuleSet ()
 	{
@@ -12,23 +12,23 @@ public class RuleSet
 
 	public void AddRule(Symbol input, float probability, SymbolString output)
 	{
-		if (ruleset.ContainsKey(input))
+		if (ruleset.ContainsKey((string)input))
 		{
-			ruleset[input].Add(new Rule(probability, output));
+			ruleset[(string)input].Add(new Rule(probability, output));
 		} else
 		{
-			ruleset.Add(input, new List<Rule>(){ new Rule(probability, output) });
+			ruleset.Add((string)input, new List<Rule>(){ new Rule(probability, output) });
 		}
 	}
 
 	public bool ContainsKey(Symbol input)
 	{
-		return ruleset.ContainsKey(input);
+		return ruleset.ContainsKey((string)input);
 	}
 
 	public SymbolString GetValue(Symbol key)
 	{
-		return ChooseRule(ruleset[key]);
+		return ChooseRule(ruleset[(string)key]);
 	}
 
 	public SymbolString ChooseRule(List<Rule> rule)

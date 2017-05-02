@@ -4,17 +4,23 @@ using System.Collections.Generic;
 
 public class SymbolString
 {
-	List<Symbol> symList;
+	List<Symbol> symList = new List<Symbol>();
 
 	public SymbolString ()
 	{
-		this.symList = new List<Symbol>();
+	}
+
+	public SymbolString (SymbolString symString)
+	{
+		for (int i = 0; i < symString.Length(); i++)
+		{
+			this.symList.Add(new Symbol(symString.GetAt(i)));
+		}
 	}
 
 	public SymbolString (string s)
 	{
-		this.symList = new List<Symbol>();
-		for (int i = 0; i < s.Length / 2; i += 2)
+		for (int i = 0; i < s.Length; i += 2)
 		{
 			if (s[i + 1] == '@') // no age
 			{
@@ -41,16 +47,10 @@ public class SymbolString
 		return symList[index];
 	}
 
-	public SymbolString ReplaceAt(int index, SymbolString replacement)
+	public void ReplaceAt(int index, SymbolString replacement)
 	{
 		symList.RemoveAt(index);
-		symList.InsertRange(index, (List<Symbol>)replacement);
-		return this;
-	}
-
-	public static explicit operator List<Symbol>(SymbolString symString)
-	{
-		return symString.symList;
+		symList.InsertRange(index, new SymbolString(replacement).symList);
 	}
 
 	public static explicit operator string(SymbolString symString)
@@ -68,6 +68,11 @@ public class SymbolString
 			}
 		}
 		return result;
+	}
+
+	public string toString()
+	{
+		return (string)this;
 	}
 }
 

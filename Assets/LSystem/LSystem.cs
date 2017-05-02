@@ -71,13 +71,13 @@ public class LSystem
 		for (int i = s.Length() - 1; i >= 0; i--) // back to front
 		{
 			Symbol key = result.GetAt(i); // the char to analyze
-			if (key.age > 0)
+			if (key.age >= 0)
 			{
 				key.age++;
 			}
 			if (rules.ContainsKey(key)) // ensure the char has a rule
 			{
-				result = result.ReplaceAt(i, rules.GetValue(key)); // apply the rule
+				result.ReplaceAt(i, rules.GetValue(key)); // apply the rule
 			}
 		}
 		return result;
