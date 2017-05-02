@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class Rule
 {
-	public float prob;
-	public string output;
+	public float prob { get; set; }
+	public SymbolString output { get; set; }
 
-	public Rule (float prob, string output)
+	public Rule (float prob, SymbolString output)
 	{
 		this.prob = prob;
 		this.output = output;
 	}
 
-	public Rule (string output)
+	public Rule (SymbolString output)
 	{
 		this.prob = 1;
 		this.output = output;

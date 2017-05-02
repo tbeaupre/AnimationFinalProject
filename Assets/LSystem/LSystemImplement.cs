@@ -22,15 +22,13 @@ public class LSystemImplement : MonoBehaviour
 		Debug.Log(string.Format("Test: maxXChar = {0}, maxXStr = {1}", maxXChar, maxXStr));
 
 		RuleSet rules2 = new RuleSet();
-		rules2.AddRule(maxXStr, 0.32f, "[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA");
-		rules2.AddRule(maxXStr, 0.32f, "[@\\@+@FAXA]@\\@-@FAXA");
-		rules2.AddRule(maxXStr, 0.32f, "[@/@+@FAXA]@/@-@FAXA");
-		rules2.AddRule(maxXStr, 0.03f, "\\@-@FAXA");
-		rules2.AddRule(maxXStr, 0.03f, "/@-@FAXA");
+		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA");
+		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@\\@+@FAXA]@\\@-@FAXA");
+		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@/@+@FAXA]@/@-@FAXA");
+		rules2.AddRule(new Symbol('X', maxX), 0.03f, "\\@-@FAXA");
+		rules2.AddRule(new Symbol('X', maxX), 0.03f, "/@-@FAXA");
 
-		rules2.AddRule(string.Concat('F', (char)('A' + maxF + 1)), 1f, string.Concat('F', (char)('A' + maxF)));
-
-		this.lSystem = new LSystem("XH", rules2, 30, 70, 30, maxN);
+		this.lSystem = new LSystem(new Symbol('X', 10), rules2, 30, 70, 30, maxN);
 	}
 	
 	// Update is called once per frame

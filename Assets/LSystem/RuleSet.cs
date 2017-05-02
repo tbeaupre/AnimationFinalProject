@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 public class RuleSet
 {
-	Dictionary<string, List<Rule>> ruleset = new Dictionary<string, List<Rule>>();
+	Dictionary<Symbol, List<Rule>> ruleset = new Dictionary<Symbol, List<Rule>>();
 
 	public RuleSet ()
 	{
 	}
 
-	public void AddRule(string input, float probability, string output)
+	public void AddRule(Symbol input, float probability, SymbolString output)
 	{
 		if (ruleset.ContainsKey(input))
 		{
@@ -21,19 +21,19 @@ public class RuleSet
 		}
 	}
 
-	public bool ContainsKey(string input)
+	public bool ContainsKey(Symbol input)
 	{
 		return ruleset.ContainsKey(input);
 	}
 
-	public string GetValue(string key)
+	public SymbolString GetValue(Symbol key)
 	{
 		return ChooseRule(ruleset[key]);
 	}
 
-	public string ChooseRule(List<Rule> rule)
+	public SymbolString ChooseRule(List<Rule> rule)
 	{
-		string result = "Error"; // This is the default, but it should never happen.
+		SymbolString result = new SymbolString(); // This is the default, but it should never happen.
 		if (rule.Count > 0)
 		{
 			result = rule[rule.Count - 1].output; // Default assuming there actually are some options
