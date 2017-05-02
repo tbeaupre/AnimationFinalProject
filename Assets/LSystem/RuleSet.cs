@@ -26,9 +26,32 @@ public class RuleSet
 		return ruleset.ContainsKey(input);
 	}
 
-	public List<Rule> GetValue(string key)
+	public string GetValue(string key)
 	{
-		return ruleset[key];
+		return ChooseRule(ruleset[key]);
+	}
+
+	public string ChooseRule(List<Rule> rule)
+	{
+		string result = "Error"; // This is the default, but it should never happen.
+		if (rule.Count > 0)
+		{
+			result = rule[rule.Count - 1].output; // Default assuming there actually are some options
+
+			float rand = Random.value;
+			foreach (Rule option in rule)
+			{
+				if (rand < option.prob)
+				{
+					result = option.output;
+					break;
+				} else
+				{
+					rand -= option.prob;
+				}
+			}
+		}
+		return result;
 	}
 }
 

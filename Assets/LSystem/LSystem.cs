@@ -85,26 +85,5 @@ public class LSystem
 		s = s.Remove(index, 2);
 		return s.Insert(index, replacement);
 	}
-
-	public string ApplyRule(List<Rule> rule, string s, int index)
-	{
-		return ApplyRule(ChooseRule(rule), s, index);
-	}
-
-	public string ChooseRule(List<Rule> rule)
-	{
-		float rand = Random.value;
-		foreach (Rule option in rule)
-		{
-			if (rand < option.prob)
-			{
-				return option.output;
-			} else
-			{
-				rand -= option.prob;
-			}
-		}
-		return "Error"; // This should never happen.
-	}
 }
 
