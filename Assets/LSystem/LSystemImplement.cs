@@ -9,6 +9,9 @@ public class LSystemImplement : MonoBehaviour
 	public int maxN = 100;
 	public int maxX = 20;
 	public int maxF = 120;
+	public float pitch = 15;
+	public float yaw = 70;
+	public float roll = 25;
 	List<Stem> stemList = new List<Stem>();
 	Stem root = null;
 
@@ -17,15 +20,18 @@ public class LSystemImplement : MonoBehaviour
 	{
 		RuleSet rules = new RuleSet();
 		Symbol maxXSym = new Symbol('X', maxX);
+		rules.AddRule(new Symbol('S', maxX), 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('S', maxX), 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('S', maxX), 0.2f, new SymbolString("+@FAXA"));
+		rules.AddRule(new Symbol('S', maxX), 0.2f, new SymbolString("FAXA"));
+
 		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@/@+@FAXA]@/@-@FAXA"));
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("/@-@FAXA"));
 
-		rules.AddRule(new Symbol('F', maxF), 1, (SymbolString)new Symbol('F', maxF - 1));
-
-		this.lSystem = new LSystem(new Symbol('X', 10), rules, 30, 70, 30, maxN);
+		this.lSystem = new LSystem(new Symbol('S', 10), rules, yaw, pitch, roll, maxN);
 		if (root == null)
 		{
 			root = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
@@ -40,77 +46,81 @@ public class LSystemImplement : MonoBehaviour
 
 	public void CreateGameObject (int n)
 	{
-		if (lSystem != null)
+		if (n < maxN)
 		{
-			SymbolString blueprint = lSystem.GetResult(n);
-
-			SymbolString result = blueprint; // The blueprint edited to include the id of the stem segment
-
-			Stack<Stem> stemStack = new Stack<Stem>();
-			float roll = 0;
-			float pitch = 0;
-			float yaw = 0;
-
-			Stem currentStem = root;
-			currentStem.stemPrefab = stemPrefab;
-
-			for (int i = 0; i < blueprint.Length(); i++)
+			if (lSystem != null)
 			{
-				Symbol sym = blueprint.GetAt(i);
-				switch (sym.character)
+				SymbolString blueprint = lSystem.GetResult(n);
+
+				SymbolString result = blueprint; // The blueprint edited to include the id of the stem segment
+
+				Stack<Stem> stemStack = new Stack<Stem>();
+				float roll = 0;
+				float pitch = 0;
+				float yaw = 0;
+
+				Stem currentStem = root;
+				currentStem.stemPrefab = stemPrefab;
+
+				for (int i = 0; i < blueprint.Length(); i++)
 				{
-				case 'F':
-					if (sym.id == -1)
+					Symbol sym = blueprint.GetAt(i);
+					switch (sym.character)
 					{
-						Stem newStem = currentStem.AddStemSegment(sym.age, pitch, yaw, roll);
-						stemList.Add(newStem);
-						result.ReplaceAt(i, (SymbolString)new Symbol(sym.character, sym.age, stemList.Count - 1));
-						currentStem = newStem;
-					} else
-					{
-						stemList[sym.id].UpdateStem(sym.age);
-						currentStem = stemList[sym.id];
+					case 'F':
+						if (sym.id == -1)
+						{
+							Stem newStem = currentStem.AddStemSegment(sym.age, pitch, yaw, roll);
+							stemList.Add(newStem);
+							result.ReplaceAt(i, (SymbolString)new Symbol(sym.character, sym.age, stemList.Count - 1));
+							newStem.id = result.GetAt(i).id;
+							currentStem = newStem;
+						} else
+						{
+							stemList[sym.id].UpdateStem(sym.age);
+							currentStem = stemList[sym.id];
+						}
+						pitch = 0;
+						yaw = 0;
+						roll = 0;
+						break;
+
+					case '&':
+						pitch -= lSystem.pitch;
+						break;
+					case '^':
+						pitch += lSystem.pitch;
+						break;
+					case '\\':
+						yaw -= lSystem.yaw;
+						break;
+					case '/':
+						yaw += lSystem.yaw;
+						break;
+					case '-':
+						roll -= lSystem.roll;
+						break;
+					case '+':
+						roll += lSystem.roll;
+						break;
+
+					case '[':
+						stemStack.Push(currentStem);
+						break;
+					case ']':
+						currentStem = stemStack.Pop();
+						break;
+					default:
+						break;
 					}
-					pitch = 0;
-					yaw = 0;
-					roll = 0;
-					break;
-
-				case '&':
-					pitch -= lSystem.pitch;
-					break;
-				case '^':
-					pitch += lSystem.pitch;
-					break;
-				case '\\':
-					yaw -= lSystem.yaw;
-					break;
-				case '/':
-					yaw += lSystem.yaw;
-					break;
-				case '-':
-					roll -= lSystem.roll;
-					break;
-				case '+':
-					roll += lSystem.roll;
-					break;
-
-				case '[':
-					stemStack.Push(currentStem);
-					break;
-				case ']':
-					currentStem = stemStack.Pop();
-					break;
-				default:
-					break;
 				}
+				root.UpdateChildTransforms(0);
+				Debug.Log(string.Format("n({0}) = {1}", n, (string)result));
+			} else
+			{
+				this.Start();
+				this.CreateGameObject(n);
 			}
-			root.UpdateChildTransforms(0);
-			Debug.Log(string.Format("n({0}) = {1}", n, (string)result));
-		} else
-		{
-			this.Start();
-			this.CreateGameObject(n);
 		}
 	}
 }

@@ -13,6 +13,7 @@ public class Stem : MonoBehaviour {
 	float roll = 0;
 	int previousAge = 0;
 	public int age = 0; // The age of the segment in frames.
+	public int id = -1;
 
 
 	// Use this for initialization
