@@ -12,6 +12,10 @@ public class SymbolString
 
 	public SymbolString (string s)
 	{
+		for (int i = 0; i < s.Length / 2; i += 2)
+		{
+			symString.Add(new Symbol(s[i], (int)s[i+1]));
+		}
 	}
 
 	public void AddSymbol(Symbol sym)

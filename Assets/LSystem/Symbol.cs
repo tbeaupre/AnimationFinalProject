@@ -12,7 +12,7 @@ public class Symbol
 	{
 		this.character = character;
 		this.age = age;
-		this.id = null;
+		this.id = -1;
 	}
 
 	public Symbol (char character, int age, int id)

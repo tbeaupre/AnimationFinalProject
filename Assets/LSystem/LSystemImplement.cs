@@ -13,22 +13,14 @@ public class LSystemImplement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-//		RuleSet rules1 = new Dictionary<char, List<Rule>>();
-//		rules1.Add('X', new List<Rule>(){new Rule("F-&[[X]\\+^X]/+^F[+^FX]\\-&X")});
-//		rules1.Add('F', new List<Rule>(){new Rule(0.8f, "FF"), new Rule(0.2f, "F")});
+		RuleSet rules = new RuleSet();
+		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('X', maxX), 0.32f, new SymbolString("[@/@+@FAXA]@/@-@FAXA"));
+		rules.AddRule(new Symbol('X', maxX), 0.03f, new SymbolString("\\@-@FAXA"));
+		rules.AddRule(new Symbol('X', maxX), 0.03f, new SymbolString("/@-@FAXA"));
 
-		char maxXChar = (char)('A' + maxX);
-		string maxXStr = string.Concat('X', maxXChar);
-		Debug.Log(string.Format("Test: maxXChar = {0}, maxXStr = {1}", maxXChar, maxXStr));
-
-		RuleSet rules2 = new RuleSet();
-		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA");
-		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@\\@+@FAXA]@\\@-@FAXA");
-		rules2.AddRule(new Symbol('X', maxX), 0.32f, "[@/@+@FAXA]@/@-@FAXA");
-		rules2.AddRule(new Symbol('X', maxX), 0.03f, "\\@-@FAXA");
-		rules2.AddRule(new Symbol('X', maxX), 0.03f, "/@-@FAXA");
-
-		this.lSystem = new LSystem(new Symbol('X', 10), rules2, 30, 70, 30, maxN);
+		this.lSystem = new LSystem(new Symbol('X', 10), rules, 30, 70, 30, maxN);
 	}
 	
 	// Update is called once per frame
