@@ -25,6 +25,11 @@ public class LSystem
 		this.results = new List<SymbolString>(maxN + 1) {(SymbolString)start};
 	}
 
+	public void UpdateResult(int n, SymbolString symString)
+	{
+		results[n] = symString;
+	}
+
 	public SymbolString GetResult(int n)
 	{
 		// First. check if the iteration asked for is greater than the max for this system.

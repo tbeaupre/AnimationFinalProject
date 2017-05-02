@@ -8,64 +8,54 @@ public class Stem : MonoBehaviour {
 	const float START_RADIUS = 0.1f;
 	const float DELTA_RADIUS = 0.01f;
 	const float DELTA_LENGTH = 0.04f;
+	float pitch = 0;
+	float yaw = 0;
+	float roll = 0;
 	int age = 1; // The age of the segment in frames.
 
 	// Use this for initialization
-	void Start () {
+	void Start () {}
+
+	// Update is called once per frame
+	void Update () {}
+
+	void Init(Transform parentTransform, Stem stemPrefab, int age, float pitch, float yaw, float roll)
+	{
+		this.stemPrefab = stemPrefab;
+		transform.SetParent(parentTransform);
+		this.pitch = pitch;
+		this.yaw = yaw;
+		this.roll = roll;
+		this.age = age;
+		UpdateStemTransforms();
 	}
 
-	void Init(Transform parentTransform, Stem stemPrefab, float offset, int age, float pitch, float yaw, float roll)
+	public void UpdateStem(int age)
 	{
-		transform.SetParent(parentTransform);
-
-		this.stemPrefab = stemPrefab;
 		this.age = age;
-		CalcCylinder();
+		UpdateStemTransforms();
+	}
 
+	void UpdateStemTransforms()
+	{
+		// Stem Transform Updates
+		float offset = transform.parent.localScale.y * 2;
 		this.transform.Translate(0, offset, 0);
 		this.transform.Rotate(pitch, yaw, roll);
 
-		float rad = START_RADIUS + (age * DELTA_RADIUS);
-		float len = age* DELTA_LENGTH;
+		// Cylinder Transform Updates
+		float rad = START_RADIUS + (age * age * DELTA_RADIUS);
+		float len = age * DELTA_LENGTH;
 		Vector3 newScale = new Vector3(rad, len, rad);
 		Vector3 newPos = new Vector3(0, len, 0);
 		transform.GetChild(0).localScale = newScale;
 		transform.GetChild(0).Translate(0, len, 0);
 	}
 
-	private void CalcCylinder()
-	{
-		foreach (Transform child in transform)
-		{
-			if (child.name == "Cylinder")
-			{
-				cylinder = child;
-			}
-		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-	}
-
-	public Transform GetCylinder()
-	{
-		if (cylinder == null) {
-			CalcCylinder();
-		}
-		return cylinder;
-	}
-
-	float GetTransformOffset()
-	{
-		float offset = GetCylinder().localScale.y * 2;
-		return offset;
-	}
-
 	public Stem AddStemSegment(int age, float pitch, float yaw, float roll)
 	{
 		Stem stemClone = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
-		stemClone.Init(this.transform, stemPrefab, GetTransformOffset(), age, pitch, yaw, roll);
+		stemClone.Init(this.transform, stemPrefab, age, pitch, yaw, roll);
 		return stemClone;
 	}
 }
