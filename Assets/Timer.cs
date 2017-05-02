@@ -15,7 +15,7 @@ public class Timer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		timer++;
-		if (timer <= dt * lSystemImplement.maxN)
+		if (timer <= dt * lSystemImplement.numIterations)
 		{
 			if (timer % dt == 0)
 			{

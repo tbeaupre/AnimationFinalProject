@@ -6,11 +6,10 @@ public class LSystemImplement : MonoBehaviour
 {
 	public Stem stemPrefab;
 	LSystem lSystem;
-	public int maxN = 100;
-	public int maxX = 20;
-	public int maxF = 120;
+	public int numIterations = 100;
+	public int branchTime = 20;
 	public float pitch = 15;
-	public float yaw = 70;
+	public float yaw = 80;
 	public float roll = 25;
 	List<Stem> stemList = new List<Stem>();
 	Stem root = null;
@@ -19,19 +18,20 @@ public class LSystemImplement : MonoBehaviour
 	void Start ()
 	{
 		RuleSet rules = new RuleSet();
-		Symbol maxXSym = new Symbol('X', maxX);
-		rules.AddRule(new Symbol('S', maxX), 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('S', maxX), 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('S', maxX), 0.2f, new SymbolString("+@FAXA"));
-		rules.AddRule(new Symbol('S', maxX), 0.2f, new SymbolString("FAXA"));
+		Symbol maxXSym = new Symbol('X', branchTime);
+		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(new Symbol('S', branchTime), 0.2f, new SymbolString("+@FAXA"));
+		rules.AddRule(new Symbol('S', branchTime), 0.2f, new SymbolString("FAXA"));
 
-		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(maxXSym, 0.16f, new SymbolString("[@[@\\@\\@+@FAXA]@/@+@FAXA]@/@-@FAXA"));
+		rules.AddRule(maxXSym, 0.16f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.32f, new SymbolString("[@/@+@FAXA]@/@-@FAXA"));
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("/@-@FAXA"));
 
-		this.lSystem = new LSystem(new Symbol('S', 10), rules, yaw, pitch, roll, maxN);
+		this.lSystem = new LSystem(new Symbol('S', 10), rules, yaw, pitch, roll, numIterations);
 		if (root == null)
 		{
 			root = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
@@ -46,7 +46,7 @@ public class LSystemImplement : MonoBehaviour
 
 	public void CreateGameObject (int n)
 	{
-		if (n < maxN)
+		if (n < numIterations)
 		{
 			if (lSystem != null)
 			{
@@ -70,6 +70,9 @@ public class LSystemImplement : MonoBehaviour
 					case 'F':
 						if (sym.id == -1)
 						{
+							pitch += Random.Range(-3f, 3f);
+							yaw += Random.Range(-3f, 3f);
+							roll += Random.Range(-3f, 3f);
 							Stem newStem = currentStem.AddStemSegment(sym.age, pitch, yaw, roll);
 							stemList.Add(newStem);
 							result.ReplaceAt(i, (SymbolString)new Symbol(sym.character, sym.age, stemList.Count - 1));
