@@ -6,8 +6,8 @@ public class LSystemImplement : MonoBehaviour
 {
 	public Stem stemPrefab;
 	LSystem lSystem;
-	public int numIterations = 100;
-	public int branchTime = 20;
+	public int numIterations = 130;
+	public int branchTime = 15;
 	public float pitch = 15;
 	public float yaw = 80;
 	public float roll = 25;
@@ -21,7 +21,6 @@ public class LSystemImplement : MonoBehaviour
 		Symbol maxXSym = new Symbol('X', branchTime);
 		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
 		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('S', branchTime), 0.2f, new SymbolString("+@FAXA"));
 		rules.AddRule(new Symbol('S', branchTime), 0.2f, new SymbolString("FAXA"));
 
 		rules.AddRule(maxXSym, 0.16f, new SymbolString("[@[@\\@\\@+@FAXA]@/@+@FAXA]@/@-@FAXA"));
@@ -44,6 +43,7 @@ public class LSystemImplement : MonoBehaviour
 	{
 	}
 
+	// Starts with a symbolstring from an lsystem and creates/updates Stem segments to match the symbolstring
 	public void CreateGameObject (int n)
 	{
 		if (n < numIterations)

@@ -25,11 +25,12 @@ public class LSystem
 		this.results = new List<SymbolString>(maxN + 1) {(SymbolString)start};
 	}
 
+	// Allows the implement to give the string back to the system except with ids.
 	public void UpdateResult(int n, SymbolString symString)
 	{
 		results[n] = symString;
 	}
-
+		
 	public SymbolString GetResult(int n)
 	{
 		// First. check if the iteration asked for is greater than the max for this system.
@@ -52,6 +53,7 @@ public class LSystem
 		}
 	}
 
+	// Calculates the resultant string after n applications of the rules
 	public SymbolString CalculateResult(int n)
 	{
 		SymbolString result = results[results.Count - 1]; // the last string that has been calculated so far
@@ -65,6 +67,7 @@ public class LSystem
 		return result;
 	}
 
+	// Increases the age of a symbol if necessary and applies the rules if there are any for that symbol
 	public SymbolString ApplyRules(SymbolString s)
 	{
 		SymbolString result = s; // the string to manipulate

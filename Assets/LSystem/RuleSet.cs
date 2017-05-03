@@ -10,6 +10,7 @@ public class RuleSet
 	{
 	}
 
+	// Adds a rule to the set.
 	public void AddRule(Symbol input, float probability, SymbolString output)
 	{
 		if (ruleset.ContainsKey((string)input))
@@ -21,16 +22,19 @@ public class RuleSet
 		}
 	}
 
+	// Checks to see if the ruleset has an a rule associated with the given symbol
 	public bool ContainsKey(Symbol input)
 	{
 		return ruleset.ContainsKey((string)input);
 	}
 
+	// Returns a randomly selected symbolstring from the outputs associated with the key
 	public SymbolString GetValue(Symbol key)
 	{
 		return ChooseRule(ruleset[(string)key]);
 	}
 
+	// Chooses a random output string from the list
 	public SymbolString ChooseRule(List<Rule> rule)
 	{
 		SymbolString result = new SymbolString(); // This is the default, but it should never happen.

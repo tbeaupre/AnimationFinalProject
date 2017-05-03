@@ -47,6 +47,7 @@ public class SymbolString
 		return symList[index];
 	}
 
+	// Replaces the symbol at the given index with the replacement symbolstring
 	public void ReplaceAt(int index, SymbolString replacement)
 	{
 		symList.RemoveAt(index);

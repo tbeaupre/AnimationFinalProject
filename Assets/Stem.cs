@@ -22,6 +22,7 @@ public class Stem : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {}
 
+	// Initializes the Stem segment
 	void Init(Transform parentTransform, float offset, Stem stemPrefab, int age, float pitch, float yaw, float roll)
 	{
 		this.stemPrefab = stemPrefab;
@@ -33,12 +34,14 @@ public class Stem : MonoBehaviour {
 		UpdateStemTransforms(offset);
 	}
 
+	// Updates the age of the stem
 	public void UpdateStem(int age)
 	{
 		this.previousAge = this.age;
 		this.age = age;
 	}
 
+	// Updates the stem's transforms based on its parent and its age
 	void UpdateStemTransforms(float offset)
 	{
 		// Stem Transform Updates
@@ -59,6 +62,7 @@ public class Stem : MonoBehaviour {
 		UpdateChildTransforms((len - previousLen) * 2);
 	}
 
+	// Updates all of its children based upon its new transforms
 	public void UpdateChildTransforms(float offset)
 	{
 		if (age != previousAge)
@@ -74,6 +78,7 @@ public class Stem : MonoBehaviour {
 		}
 	}
 
+	// Creates a new stem segment with this stem as its parent
 	public Stem AddStemSegment(int age, float pitch, float yaw, float roll)
 	{
 		Stem stemClone = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
