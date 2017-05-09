@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class LSystem
 {
+	List<Variable> vars;
 	RuleSet rules;
 	public float pitch = 25; // the change in angle that ^ and & make (in degrees).
 	public float yaw = 25; // the change in angle that \ and / make (in degrees).
@@ -12,9 +13,10 @@ public class LSystem
 
 	List<SymbolString> results;
 
-	public LSystem (Symbol start, RuleSet rules, float pitch, float yaw, float roll, int maxN)
+	public LSystem (List<Variable> vars, Symbol start, RuleSet rules, float pitch, float yaw, float roll, int maxN)
 	{
 		Random.InitState(System.Environment.TickCount);
+		this.vars = vars;
 		this.rules = rules;
 
 		this.pitch = pitch;
@@ -74,9 +76,13 @@ public class LSystem
 		for (int i = s.Length() - 1; i >= 0; i--) // back to front
 		{
 			Symbol key = result.GetAt(i); // the char to analyze
-			if (key.age >= 0)
+			if (key.age >= 0 && key.age < Variables.GetMaxAge(vars, key))
 			{
 				key.age++;
+			}
+			else if(key.age >= 0)
+			{
+				Debug.Log("MAX AGE REACHED");
 			}
 			if (rules.ContainsKey(key)) // ensure the char has a rule
 			{

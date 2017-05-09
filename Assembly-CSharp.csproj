@@ -53,6 +53,8 @@
      <Compile Include="Assets\LSystem\RuleSet.cs" />
      <Compile Include="Assets\LSystem\Symbol.cs" />
      <Compile Include="Assets\LSystem\SymbolString.cs" />
+     <Compile Include="Assets\LSystem\Variable.cs" />
+     <Compile Include="Assets\LSystem\Variables.cs" />
      <Compile Include="Assets\Stem.cs" />
      <Compile Include="Assets\Timer.cs" />
  <Reference Include="UnityEngine.UI">

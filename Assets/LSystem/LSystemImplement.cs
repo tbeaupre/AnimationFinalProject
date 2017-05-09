@@ -8,6 +8,7 @@ public class LSystemImplement : MonoBehaviour
 	LSystem lSystem;
 	public int numIterations = 130;
 	public int branchTime = 15;
+	public int maxStemAge = 100;
 	public float pitch = 15;
 	public float yaw = 80;
 	public float roll = 25;
@@ -17,11 +18,17 @@ public class LSystemImplement : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		List<Variable> vars = new List<Variable>();
+		vars.Add(new Variable('S', branchTime));
+		vars.Add(new Variable('X', branchTime));
+		vars.Add(new Variable('F', maxStemAge));
+
 		RuleSet rules = new RuleSet();
+		Symbol maxSSym = new Symbol('S', branchTime);
 		Symbol maxXSym = new Symbol('X', branchTime);
-		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('S', branchTime), 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
-		rules.AddRule(new Symbol('S', branchTime), 0.2f, new SymbolString("FAXA"));
+		rules.AddRule(maxSSym, 0.3f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(maxSSym, 0.3f, new SymbolString("[@\\@+@FAXA]@\\@-@FAXA"));
+		rules.AddRule(maxSSym, 0.2f, new SymbolString("FAXA"));
 
 		rules.AddRule(maxXSym, 0.16f, new SymbolString("[@[@\\@\\@+@FAXA]@/@+@FAXA]@/@-@FAXA"));
 		rules.AddRule(maxXSym, 0.16f, new SymbolString("[@[@/@/@+@FAXA]@\\@+@FAXA]@\\@-@FAXA"));
@@ -30,7 +37,7 @@ public class LSystemImplement : MonoBehaviour
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("\\@-@FAXA"));
 		rules.AddRule(maxXSym, 0.03f, new SymbolString("/@-@FAXA"));
 
-		this.lSystem = new LSystem(new Symbol('S', 10), rules, yaw, pitch, roll, numIterations);
+		this.lSystem = new LSystem(vars, new Symbol('S', 10), rules, yaw, pitch, roll, numIterations);
 		if (root == null)
 		{
 			root = Instantiate<Stem>(stemPrefab, transform.position, transform.rotation);
